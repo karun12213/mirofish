@@ -46,3 +46,10 @@ tiktoken
 tenacity
 aiohttp
 pyyaml
+numpy
+scipy
+pandas
+torch --index-url https://download.pytorch.org/whl/cpu
+numpy
+pandas
+scipy
