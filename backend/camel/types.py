@@ -1,2 +1,0 @@
-class ModelPlatformType:
-    OPENAI = "openai"
