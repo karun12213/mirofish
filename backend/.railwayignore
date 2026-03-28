@@ -1,0 +1,9 @@
+oasis/
+camel/
+__pycache__/
+*.pyc
+*.pyo
+logs/
+uploads/
+*.db
+.env
