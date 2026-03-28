@@ -90,6 +90,47 @@ ELECTION_KEYWORDS = {"election","constituency","constituencies","party","parties
 
 
 
+# ─── Political/Election ontology override ───────────────────────────────────
+POLITICAL_ONTOLOGY = {
+    "entity_types": [
+        {"name": "Voter", "description": "An individual voter or citizen who participates in elections and social media.",
+         "attributes": [{"name": "full_name","type":"text","description":"Full name"},{"name":"constituency","type":"text","description":"Home constituency"},{"name":"caste_community","type":"text","description":"Caste or community"}],"examples":["urban youth voter","farmer voter","first-time voter"]},
+        {"name": "Candidate", "description": "A person contesting in an election for a constituency seat.",
+         "attributes": [{"name":"full_name","type":"text","description":"Candidate name"},{"name":"constituency","type":"text","description":"Constituency contested"},{"name":"party_affiliation","type":"text","description":"Party name"}],"examples":["DMK candidate Erode East","TVK candidate Chennai North"]},
+        {"name": "PoliticalParty", "description": "A political party or alliance contesting in the election.",
+         "attributes": [{"name":"party_name","type":"text","description":"Party name"},{"name":"alliance","type":"text","description":"Alliance name"},{"name":"ideology","type":"text","description":"Political ideology"}],"examples":["DMK","AIADMK","TVK","BJP","INC"]},
+        {"name": "Constituency", "description": "An assembly constituency in the election.",
+         "attributes": [{"name":"constituency_name","type":"text","description":"Constituency name"},{"name":"district","type":"text","description":"District it belongs to"},{"name":"incumbent_party","type":"text","description":"Current holding party"}],"examples":["Chepauk","Coimbatore South","Madurai Central"]},
+        {"name": "District", "description": "An administrative district grouping multiple constituencies.",
+         "attributes": [{"name":"district_name","type":"text","description":"District name"},{"name":"region","type":"text","description":"Geographic region of TN"}],"examples":["Chennai","Coimbatore","Madurai","Salem"]},
+        {"name": "PoliticalLeader", "description": "A senior political figure, party president, or chief ministerial candidate.",
+         "attributes": [{"name":"full_name","type":"text","description":"Leader name"},{"name":"position","type":"text","description":"Party position or title"},{"name":"party_affiliation","type":"text","description":"Party"}],"examples":["MK Stalin","Edappadi Palaniswami","Vijay","PM Modi"]},
+        {"name": "MediaOutlet", "description": "A news channel, newspaper, or social media account reporting on politics.",
+         "attributes": [{"name":"outlet_name","type":"text","description":"Name of media outlet"},{"name":"outlet_type","type":"text","description":"TV/Print/Digital/Social"}],"examples":["Sun TV","Dinamalar","Polimer News","The Hindu"]},
+        {"name": "CasteOrCommunity", "description": "A caste group or community with electoral influence in Tamil Nadu.",
+         "attributes": [{"name":"community_name","type":"text","description":"Community name"},{"name":"dominant_districts","type":"text","description":"Districts where dominant"}],"examples":["Vanniyar","Thevar","Nadar","Gounder","Dalit"]},
+        {"name": "Person", "description": "Any individual person not fitting other specific person types.",
+         "attributes": [{"name":"full_name","type":"text","description":"Full name of the person"},{"name":"role","type":"text","description":"Role or occupation"}],"examples":["ordinary citizen","anonymous netizen"]},
+        {"name": "Organization", "description": "Any organization not fitting other specific organization types.",
+         "attributes": [{"name":"org_name","type":"text","description":"Name of the organization"},{"name":"org_type","type":"text","description":"Type of organization"}],"examples":["small business","community group"]}
+    ],
+    "edge_types": [
+        {"name":"CONTESTS_IN","description":"Candidate contests in a constituency","source_targets":[{"source":"Candidate","target":"Constituency"}],"attributes":[]},
+        {"name":"AFFILIATED_WITH","description":"Person or candidate affiliated with a political party","source_targets":[{"source":"Candidate","target":"PoliticalParty"},{"source":"PoliticalLeader","target":"PoliticalParty"}],"attributes":[]},
+        {"name":"LEADS","description":"Leader leads or heads a party","source_targets":[{"source":"PoliticalLeader","target":"PoliticalParty"}],"attributes":[]},
+        {"name":"LOCATED_IN","description":"Constituency located in a district","source_targets":[{"source":"Constituency","target":"District"}],"attributes":[]},
+        {"name":"SUPPORTS","description":"Voter or community supports a party or candidate","source_targets":[{"source":"Voter","target":"PoliticalParty"},{"source":"CasteOrCommunity","target":"PoliticalParty"}],"attributes":[]},
+        {"name":"OPPOSES","description":"Entity opposes a party or candidate","source_targets":[{"source":"Voter","target":"PoliticalParty"},{"source":"CasteOrCommunity","target":"PoliticalParty"}],"attributes":[]},
+        {"name":"REPORTS_ON","description":"Media outlet reports on political entity","source_targets":[{"source":"MediaOutlet","target":"PoliticalParty"},{"source":"MediaOutlet","target":"Candidate"}],"attributes":[]},
+        {"name":"ALLIANCE_WITH","description":"Party forms alliance with another party","source_targets":[{"source":"PoliticalParty","target":"PoliticalParty"}],"attributes":[]}
+    ],
+    "analysis_summary": "Tamil Nadu 2026 Assembly Election simulation with 234 constituencies, 5 major parties (DMK, AIADMK, TVK, BJP, INC), caste-community voter blocs, and district-level risk analysis."
+}
+
+ELECTION_KEYWORDS = {"election","constituency","constituencies","party","parties","dmk","aiadmk","tvk","bjp","voter","vote","candidate","assembly","நாடாளுமன்ற","தேர்தல்"}
+
+
+
 # 本体生成的系统提示词
 ONTOLOGY_SYSTEM_PROMPT = """你是一个专业的知识图谱本体设计专家。你的任务是分析给定的文本内容和模拟需求，设计适合**社交媒体舆论模拟**的实体类型和关系类型。
 
@@ -275,6 +316,13 @@ class OntologyGenerator:
             {"role": "user", "content": user_message}
         ]
         
+        # Check for political/election context → use hardcoded ontology
+        req_lower = simulation_requirement.lower()
+        if any(kw in req_lower for kw in ELECTION_KEYWORDS):
+            import logging
+            logging.getLogger(__name__).info("Political simulation detected — using hardcoded TN election ontology")
+            return POLITICAL_ONTOLOGY
+
         # Check for political/election context → use hardcoded ontology
         req_lower = simulation_requirement.lower()
         if any(kw in req_lower for kw in ELECTION_KEYWORDS):
