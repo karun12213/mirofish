@@ -6,18 +6,18 @@
         <div class="card-header">
           <div class="step-info">
             <span class="step-num">01</span>
-            <span class="step-title">模拟实例初始化</span>
+            <span class="step-title">Simulation Instance Init</span>
           </div>
           <div class="step-status">
-            <span v-if="phase > 0" class="badge success">已完成</span>
-            <span v-else class="badge processing">初始化</span>
+            <span v-if="phase > 0" class="badge success">Completed</span>
+            <span v-else class="badge processing">Init</span>
           </div>
         </div>
         
         <div class="card-content">
           <p class="api-note">POST /api/simulation/create</p>
           <p class="description">
-            新建simulation实例，拉取模拟世界参数模版
+            Create simulation instance, pull simulation world parameter template
           </p>
 
           <div v-if="simulationId" class="info-card">
@@ -35,7 +35,7 @@
             </div>
             <div class="info-row">
               <span class="info-label">Task ID</span>
-              <span class="info-value mono">{{ taskId || '异步任务已完成' }}</span>
+              <span class="info-value mono">{{ taskId || 'Async task completed' }}</span>
             </div>
           </div>
         </div>
@@ -46,41 +46,41 @@
         <div class="card-header">
           <div class="step-info">
             <span class="step-num">02</span>
-            <span class="step-title">生成 Agent 人设</span>
+            <span class="step-title">Generate Agent Personas</span>
           </div>
           <div class="step-status">
-            <span v-if="phase > 1" class="badge success">已完成</span>
+            <span v-if="phase > 1" class="badge success">Completed</span>
             <span v-else-if="phase === 1" class="badge processing">{{ prepareProgress }}%</span>
-            <span v-else class="badge pending">等待</span>
+            <span v-else class="badge pending">Pending</span>
           </div>
         </div>
 
         <div class="card-content">
           <p class="api-note">POST /api/simulation/prepare</p>
           <p class="description">
-            结合上下文，自动调用工具从知识图谱梳理实体与关系，初始化模拟个体，并基于现实种子赋予他们独特的行为与记忆
+            Combine context, call tools to extract entities from knowledge graph, init simulation individuals, and give them unique behavior based on reality seeds.
           </p>
 
           <!-- Profiles Stats -->
           <div v-if="profiles.length > 0" class="stats-grid">
             <div class="stat-card">
               <span class="stat-value">{{ profiles.length }}</span>
-              <span class="stat-label">当前Agent数</span>
+              <span class="stat-label">Current Agents</span>
             </div>
             <div class="stat-card">
               <span class="stat-value">{{ expectedTotal || '-' }}</span>
-              <span class="stat-label">预期Agent总数</span>
+              <span class="stat-label">Expected Total Agents</span>
             </div>
             <div class="stat-card">
               <span class="stat-value">{{ totalTopicsCount }}</span>
-              <span class="stat-label">现实种子当前关联话题数</span>
+              <span class="stat-label">Seed Associated Topics</span>
             </div>
           </div>
 
           <!-- Profiles List Preview -->
           <div v-if="profiles.length > 0" class="profiles-preview">
             <div class="preview-header">
-              <span class="preview-title">已生成的 Agent 人设</span>
+              <span class="preview-title">Generated Agent Personas</span>
             </div>
             <div class="profiles-list">
               <div 
@@ -94,9 +94,9 @@
                   <span class="profile-username">@{{ profile.name || `agent_${idx}` }}</span>
                 </div>
                 <div class="profile-meta">
-                  <span class="profile-profession">{{ profile.profession || '未知职业' }}</span>
+                  <span class="profile-profession">{{ profile.profession || 'Unknown Profession' }}</span>
                 </div>
-                <p class="profile-bio">{{ profile.bio || '暂无简介' }}</p>
+                <p class="profile-bio">{{ profile.bio || 'No bio available' }}</p>
                 <div v-if="profile.interested_topics?.length" class="profile-topics">
                   <span 
                     v-for="topic in profile.interested_topics.slice(0, 3)" 
@@ -118,19 +118,19 @@
         <div class="card-header">
           <div class="step-info">
             <span class="step-num">03</span>
-            <span class="step-title">生成双平台模拟配置</span>
+            <span class="step-title">Generate Dual-Platform Config</span>
           </div>
           <div class="step-status">
-            <span v-if="phase > 2" class="badge success">已完成</span>
-            <span v-else-if="phase === 2" class="badge processing">生成中</span>
-            <span v-else class="badge pending">等待</span>
+            <span v-if="phase > 2" class="badge success">Completed</span>
+            <span v-else-if="phase === 2" class="badge processing">Generating</span>
+            <span v-else class="badge pending">Pending</span>
           </div>
         </div>
 
         <div class="card-content">
           <p class="api-note">POST /api/simulation/prepare</p>
           <p class="description">
-            LLM 根据模拟需求与现实种子，智能设置世界时间流速、推荐算法、每个个体的活跃时间段、发言频率、事件触发等参数
+            LLM smartly sets world time flow, recommendation algorithm, individual active periods, action frequencies, based on simulation requirement and seeds.
           </p>
           
           <!-- Config Preview -->
@@ -363,7 +363,7 @@
         <div class="card-content">
           <p class="api-note">POST /api/simulation/prepare</p>
           <p class="description">
-            基于叙事方向，自动生成初始激活事件与热点话题，引导模拟世界的初始状态
+            Based on narrative direction, automatically generates initial activation events and hot topics to guide simulation world initial state.
           </p>
 
           <div v-if="simulationConfig?.event_config" class="orchestration-content">
@@ -433,7 +433,7 @@
 
         <div class="card-content">
           <p class="api-note">POST /api/simulation/start</p>
-          <p class="description">模拟环境已准备完成，可以开始运行模拟</p>
+          <p class="description">Simulation environment prepared, ready to start running simulation</p>
           
           <!-- 模拟轮数配置 - 只有在配置生成完成且轮数计算出来后才显示 -->
           <div v-if="simulationConfig && autoGeneratedRounds" class="rounds-config-section">
@@ -514,14 +514,14 @@
               class="action-btn secondary"
               @click="$emit('go-back')"
             >
-              ← 返回图谱构建
+              ← Back to Graph Build
             </button>
             <button 
               class="action-btn primary"
               :disabled="phase < 4"
               @click="handleStartSimulation"
             >
-              开始双世界并行模拟 ➝
+              Start Parallel Simulation ➝
             </button>
           </div>
         </div>
