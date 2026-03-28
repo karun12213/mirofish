@@ -430,7 +430,8 @@ class SimulationRunner:
             # 这可以修复第三方库（如 OASIS）读取文件时未指定编码的问题
             env = os.environ.copy()
             env['PYTHONUTF8'] = '1'  # Python 3.7+ 支持，让所有 open() 默认使用 UTF-8
-            env['PYTHONIOENCODING'] = 'utf-8'  # 确保 stdout/stderr 使用 UTF-8
+            env['PYTHONIOENCODING'] = 'utf-8'
+            env['PYTHONPATH'] = '/app:' + env.get('PYTHONPATH', '')  # 确保 stdout/stderr 使用 UTF-8
             
             # 设置工作目录为模拟目录（数据库等文件会生成在此）
             # 使用 start_new_session=True 创建新的进程组，确保可以通过 os.killpg 终止所有子进程
