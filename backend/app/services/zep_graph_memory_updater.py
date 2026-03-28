@@ -63,8 +63,8 @@ class AgentActivity:
     def _describe_create_post(self) -> str:
         content = self.action_args.get("content", "")
         if content:
-            return f"发布了一条帖子：「{content}」"
-        return "发布了一条帖子"
+            return f"Published a post: '{content}'"
+        return "Published a post"
     
     def _describe_like_post(self) -> str:
         """点赞帖子 - 包含帖子原文和作者信息"""
@@ -72,12 +72,12 @@ class AgentActivity:
         post_author = self.action_args.get("post_author_name", "")
         
         if post_content and post_author:
-            return f"点赞了{post_author}的帖子：「{post_content}」"
+            return f"Liked {post_author}'s post: '{post_content}'"
         elif post_content:
-            return f"点赞了一条帖子：「{post_content}」"
+            return f"Liked a post: '{post_content}'"
         elif post_author:
-            return f"点赞了{post_author}的一条帖子"
-        return "点赞了一条帖子"
+            return f"Liked a post from {post_author}"
+        return "Liked a post"
     
     def _describe_dislike_post(self) -> str:
         """踩帖子 - 包含帖子原文和作者信息"""
@@ -85,12 +85,12 @@ class AgentActivity:
         post_author = self.action_args.get("post_author_name", "")
         
         if post_content and post_author:
-            return f"踩了{post_author}的帖子：「{post_content}」"
+            return f"Disliked {post_author}'s post: '{post_content}'"
         elif post_content:
-            return f"踩了一条帖子：「{post_content}」"
+            return f"Disliked a post: '{post_content}'"
         elif post_author:
-            return f"踩了{post_author}的一条帖子"
-        return "踩了一条帖子"
+            return f"Disliked a post from {post_author}"
+        return "Disliked a post"
     
     def _describe_repost(self) -> str:
         """转发帖子 - 包含原帖内容和作者信息"""
@@ -98,12 +98,12 @@ class AgentActivity:
         original_author = self.action_args.get("original_author_name", "")
         
         if original_content and original_author:
-            return f"转发了{original_author}的帖子：「{original_content}」"
+            return f"Reposted {original_author}'s post: '{original_content}'"
         elif original_content:
-            return f"转发了一条帖子：「{original_content}」"
+            return f"Reposted a post: '{original_content}'"
         elif original_author:
-            return f"转发了{original_author}的一条帖子"
-        return "转发了一条帖子"
+            return f"Reposted a post from {original_author}"
+        return "Reposted a post"
     
     def _describe_quote_post(self) -> str:
         """引用帖子 - 包含原帖内容、作者信息和引用评论"""
@@ -113,16 +113,16 @@ class AgentActivity:
         
         base = ""
         if original_content and original_author:
-            base = f"引用了{original_author}的帖子「{original_content}」"
+            base = f"Quoted {original_author}'s post '{original_content}'"
         elif original_content:
-            base = f"引用了一条帖子「{original_content}」"
+            base = f"Quoted a post '{original_content}'"
         elif original_author:
-            base = f"引用了{original_author}的一条帖子"
+            base = f"Quoted a post from {original_author}"
         else:
-            base = "引用了一条帖子"
+            base = "Quoted a post"
         
         if quote_content:
-            base += f"，并评论道：「{quote_content}」"
+            base += f", and commented: '{quote_content}'"
         return base
     
     def _describe_follow(self) -> str:
@@ -130,8 +130,8 @@ class AgentActivity:
         target_user_name = self.action_args.get("target_user_name", "")
         
         if target_user_name:
-            return f"关注了用户「{target_user_name}」"
-        return "关注了一个用户"
+            return f"Followed user '{target_user_name}'"
+        return "Followed a user"
     
     def _describe_create_comment(self) -> str:
         """发表评论 - 包含评论内容和所评论的帖子信息"""
@@ -141,13 +141,13 @@ class AgentActivity:
         
         if content:
             if post_content and post_author:
-                return f"在{post_author}的帖子「{post_content}」下评论道：「{content}」"
+                return f"Commented on {post_author}'s post '{post_content}': '{content}'"
             elif post_content:
-                return f"在帖子「{post_content}」下评论道：「{content}」"
+                return f"Commented on post '{post_content}': '{content}'"
             elif post_author:
-                return f"在{post_author}的帖子下评论道：「{content}」"
-            return f"评论道：「{content}」"
-        return "发表了评论"
+                return f"Commented on {post_author}'s post: '{content}'"
+            return f"Commented: '{content}'"
+        return "Published a comment"
     
     def _describe_like_comment(self) -> str:
         """点赞评论 - 包含评论内容和作者信息"""
@@ -155,12 +155,12 @@ class AgentActivity:
         comment_author = self.action_args.get("comment_author_name", "")
         
         if comment_content and comment_author:
-            return f"点赞了{comment_author}的评论：「{comment_content}」"
+            return f"Liked {comment_author}'s comment: '{comment_content}'"
         elif comment_content:
-            return f"点赞了一条评论：「{comment_content}」"
+            return f"Liked a comment: '{comment_content}'"
         elif comment_author:
-            return f"点赞了{comment_author}的一条评论"
-        return "点赞了一条评论"
+            return f"Liked a comment from {comment_author}"
+        return "Liked a comment"
     
     def _describe_dislike_comment(self) -> str:
         """踩评论 - 包含评论内容和作者信息"""
@@ -168,34 +168,34 @@ class AgentActivity:
         comment_author = self.action_args.get("comment_author_name", "")
         
         if comment_content and comment_author:
-            return f"踩了{comment_author}的评论：「{comment_content}」"
+            return f"Disliked {comment_author}'s comment: '{comment_content}'"
         elif comment_content:
-            return f"踩了一条评论：「{comment_content}」"
+            return f"Disliked a comment: '{comment_content}'"
         elif comment_author:
-            return f"踩了{comment_author}的一条评论"
-        return "踩了一条评论"
+            return f"Disliked a comment from {comment_author}"
+        return "Disliked a comment"
     
     def _describe_search(self) -> str:
         """搜索帖子 - 包含搜索关键词"""
         query = self.action_args.get("query", "") or self.action_args.get("keyword", "")
-        return f"搜索了「{query}」" if query else "进行了搜索"
+        return f"Searched for '{query}'" if query else "Performed a search"
     
     def _describe_search_user(self) -> str:
         """搜索用户 - 包含搜索关键词"""
         query = self.action_args.get("query", "") or self.action_args.get("username", "")
-        return f"搜索了用户「{query}」" if query else "搜索了用户"
+        return f"Searched for user '{query}'" if query else "Searched for a user"
     
     def _describe_mute(self) -> str:
         """屏蔽用户 - 包含被屏蔽用户的名称"""
         target_user_name = self.action_args.get("target_user_name", "")
         
         if target_user_name:
-            return f"屏蔽了用户「{target_user_name}」"
-        return "屏蔽了一个用户"
+            return f"Blocked user '{target_user_name}'"
+        return "Blocked a user"
     
     def _describe_generic(self) -> str:
         # 对于未知的动作类型，生成通用描述
-        return f"执行了{self.action_type}操作"
+        return f"Performed {self.action_type} action"
 
 
 class ZepGraphMemoryUpdater:

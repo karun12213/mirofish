@@ -46,6 +46,12 @@ else:
     if os.path.exists(_backend_env):
         load_dotenv(_backend_env)
 
+if os.environ.get("MOCK_APIS", "").lower() == "true":
+    print("WARNING: Running in MOCK API mode. External calls to OpenAI and Zep will be mocked.")
+    try:
+        import mock_apis
+    except ImportError as e:
+        print(f"未能导入 mock_apis: {e}")
 
 import re
 

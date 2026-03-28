@@ -18,6 +18,14 @@ if sys.platform == 'win32':
 # 添加项目根目录到路径
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import os
+from dotenv import load_dotenv
+load_dotenv(os.path.join(os.path.dirname(__file__), '../.env'), override=True)
+
+if os.environ.get('MOCK_APIS', '').lower() == 'true':
+    print("WARNING: Running in MOCK API mode. External calls to OpenAI and Zep will be mocked.")
+    import mock_apis
+
 from app import create_app
 from app.config import Config
 
