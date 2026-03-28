@@ -17,7 +17,7 @@ openai>=1.0.0
 zep-cloud==3.13.0
 
 # ============= OASIS 社交媒体模拟 =============
-git+https://github.com/camel-ai/oasis.git
+oasis-social
 camel-ai==0.2.90
 
 # ============= 文件处理 =============
