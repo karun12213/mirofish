@@ -36,3 +36,13 @@ colorama
 networkx
 loguru
 tqdm
+requests
+colorama
+networkx
+loguru
+tqdm
+Pillow
+tiktoken
+tenacity
+aiohttp
+pyyaml
