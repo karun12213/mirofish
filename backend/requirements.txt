@@ -12,3 +12,4 @@ numpy
 requests
 colorama
 Pillow
+sentence-transformers
