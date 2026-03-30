@@ -12,5 +12,3 @@ numpy
 requests
 colorama
 Pillow
-camel-ai==0.2.90
-git+https://github.com/camel-ai/oasis.git
