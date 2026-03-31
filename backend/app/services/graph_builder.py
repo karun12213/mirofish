@@ -317,7 +317,7 @@ class GraphBuilderService:
             # 发送到Zep
             try:
                 rate_limiter.wait()  # RATE LIMIT PATCH
-            batch_result = self.client.graph.add_batch(
+                batch_result = self.client.graph.add_batch(
                     graph_id=graph_id,
                     episodes=episodes
                 )
