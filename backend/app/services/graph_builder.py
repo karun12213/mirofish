@@ -371,7 +371,7 @@ class GraphBuilderService:
             # 检查每个 episode 的处理状态
             for ep_uuid in list(pending_episodes):
                 try:
-                    episode = rate_limiter.wait() or self.client.graph.episode.get(uuid_=ep_uuid)
+                    episode = self.client.graph.episode.get(uuid_=ep_uuid)
                     is_processed = getattr(episode, 'processed', False)
                     
                     if is_processed:
