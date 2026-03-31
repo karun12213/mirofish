@@ -19,7 +19,6 @@ from ..config import Config
 from ..utils.logger import get_logger
 from ..utils.llm_client import LLMClient
 from ..utils.zep_paging import fetch_all_nodes, fetch_all_edges
-from ..utils.rate_limiter import rate_limiter
 
 logger = get_logger('mirofish.zep_tools')
 
@@ -439,13 +438,7 @@ class ZepToolsService:
             self._llm_client = LLMClient()
         return self._llm_client
     
-    def _call_with_retry(self, func, operation_name: str, max_retries: int = None, cache_key: str = None):
-        # --- RATE LIMIT PATCH ---
-        if cache_key:
-            cached = rate_limiter.get_cached(cache_key)
-            if cached is not None:
-                return cached
-        # --- END PATCH ---
+    def _call_with_retry(self, func, operation_name: str, max_retries: int = None):
         """带重试机制的API调用"""
         max_retries = max_retries or self.MAX_RETRIES
         last_exception = None
@@ -461,15 +454,7 @@ class ZepToolsService:
                         f"Zep {operation_name} 第 {attempt + 1} 次尝试失败: {str(e)[:100]}, "
                         f"{delay:.1f}秒后重试..."
                     )
-                    # --- RATE LIMIT PATCH ---
-                    retry_after = 60
-                    err_str = str(e)
-                    if '429' in err_str or 'Rate limit' in err_str:
-                        rate_limiter.handle_429(retry_after)
-                        time.sleep(retry_after + 1)
-                    else:
-                        time.sleep(delay)
-                    # --- END PATCH ---
+                    time.sleep(delay)
                     delay *= 2
                 else:
                     logger.error(f"Zep {operation_name} 在 {max_retries} 次尝试后仍失败: {str(e)}")
@@ -502,7 +487,6 @@ class ZepToolsService:
         
         # 尝试使用Zep Cloud Search API
         try:
-            rate_limiter.wait()  # RATE LIMIT PATCH
             search_results = self._call_with_retry(
                 func=lambda: self.client.graph.search(
                     graph_id=graph_id,

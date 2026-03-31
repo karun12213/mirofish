@@ -17,8 +17,6 @@ from .logger import get_logger
 
 logger = get_logger('mirofish.zep_paging')
 
-from .rate_limiter import rate_limiter
-
 _DEFAULT_PAGE_SIZE = 100
 _MAX_NODES = 2000
 _DEFAULT_MAX_RETRIES = 3
@@ -42,7 +40,6 @@ def _fetch_page_with_retry(
 
     for attempt in range(max_retries):
         try:
-            rate_limiter.wait()  # RATE LIMIT PATCH
             return api_call(*args, **kwargs)
         except (ConnectionError, TimeoutError, OSError, InternalServerError) as e:
             last_exception = e
